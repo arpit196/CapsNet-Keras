@@ -121,10 +121,11 @@ class CapsuleLayer(layers.Layer):
         # inputs.shape=[None, input_num_capsule, input_dim_capsule]
         # inputs_expand.shape=[None, 1, input_num_capsule, input_dim_capsule]
         inputs_expand = K.expand_dims(inputs, 1)
-
+        inputs_tiled  = tf.tile(inputs_expand, [1, self.num_capsule, 1, 1])
+        inputs_tiled  = tf.expand_dims(inputs_tiled, 4)
         # Replicate num_capsule dimension to prepare being multiplied by W
         # inputs_tiled.shape=[None, num_capsule, input_num_capsule, input_dim_capsule]
-        inputs_tiled = K.tile(inputs_expand, [1, self.num_capsule, 1, 1])
+        #inputs_tiled = K.tile(inputs_expand, [1, self.num_capsule, 1, 1])
 
         # Compute `inputs * W` by scanning inputs_tiled on dimension 0.
         # x.shape=[num_capsule, input_num_capsule, input_dim_capsule]
@@ -149,7 +150,10 @@ class CapsuleLayer(layers.Layer):
             # The first two dimensions as `batch` dimension,
             # then matmal: [input_num_capsule] x [input_num_capsule, dim_capsule] -> [dim_capsule].
             # outputs.shape=[None, num_capsule, dim_capsule]
-            outputs = squash(K.batch_dot(c, inputs_hat, [2, 2]))  # [None, 10, 16]
+            #outputs = squash(K.batch_dot(c, inputs_hat, [2, 2]))  # [None, 10, 16]
+            outputs = tf.multiply(c, inputs_hat)
+            outputs = tf.reduce_sum(outputs, axis=2, keepdims=True)
+            outputs = squash(outputs, axis=-2)  # [None, 10, 1, 16, 1]
 
             if i < self.routings - 1:
                 # outputs.shape =  [None, num_capsule, dim_capsule]
@@ -157,7 +161,9 @@ class CapsuleLayer(layers.Layer):
                 # The first two dimensions as `batch` dimension,
                 # then matmal: [dim_capsule] x [input_num_capsule, dim_capsule]^T -> [input_num_capsule].
                 # b.shape=[batch_size, num_capsule, input_num_capsule]
-                b += K.batch_dot(outputs, inputs_hat, [2, 3])
+                outputs_tiled = tf.tile(outputs, [1, 1, self.input_num_capsule, 1, 1])
+                agreement = tf.matmul(inputs_hat, outputs_tiled, transpose_a=True)
+                b = tf.add(b, agreement)
         # End: Routing algorithm -----------------------------------------------------------------------#
 
         return outputs
