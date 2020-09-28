@@ -133,12 +133,13 @@ class CapsuleLayer(layers.Layer):
         # Regard the first two dimensions as `batch` dimension,
         # then matmul: [input_dim_capsule] x [dim_capsule, input_dim_capsule]^T -> [dim_capsule].
         # inputs_hat.shape = [None, num_capsule, input_num_capsule, dim_capsule]
-        inputs_hat = K.map_fn(lambda x: K.batch_dot(x, self.W, [2, 3]), elems=inputs_tiled)
+        inputs_hat = tf.map_fn(lambda x: tf.matmul(self.W, x), elems=inputs_tiled)
 
         # Begin: Routing algorithm ---------------------------------------------------------------------#
         # The prior for coupling coefficient, initialized as zeros.
         # b.shape = [None, self.num_capsule, self.input_num_capsule].
-        b = tf.zeros(shape=[K.shape(inputs_hat)[0], self.num_capsule, self.input_num_capsule])
+        b = tf.zeros(shape=[tf.shape(inputs_hat)[0], self.num_capsule, 
+                      self.input_num_capsule, 1, 1])
 
         assert self.routings > 0, 'The routings should be > 0.'
         for i in range(self.routings):
