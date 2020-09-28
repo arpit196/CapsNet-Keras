@@ -58,7 +58,7 @@ class Mask(layers.Layer):
         # inputs.shape=[None, num_capsule, dim_capsule]
         # mask.shape=[None, num_capsule]
         # masked.shape=[None, num_capsule * dim_capsule]
-        masked = K.batch_flatten(inputs * K.expand_dims(mask, -1))
+        masked = K.batch_flatten(tf.multiply(inputs , K.expand_dims(mask, -1)))
         return masked
 
     def compute_output_shape(self, input_shape):
