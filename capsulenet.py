@@ -71,7 +71,7 @@ def CapsNet(input_shape, n_class, routings):
 
     # manipulate model
     noise = layers.Input(shape=(n_class, 16))
-    noised_digitcaps = layers.Add()([digitcaps, noise])
+    noised_digitcaps = layers.Add()([tf.squeeze(digitcaps,[1,3]), noise])
     masked_noised_y = Mask()([noised_digitcaps, y])
     manipulate_model = models.Model([x, y, noise], decoder(masked_noised_y))
     return train_model, eval_model, manipulate_model
