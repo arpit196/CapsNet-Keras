@@ -218,12 +218,11 @@ class CapsuleLayer(layers.Layer):
             great = tf.math.greater(outputs, 0.5)
             true_num = tf.reduce_sum(tf.cast(great, tf.float32))
             true = tf.math.greater(true_num, 0)
-            if(not true):
-                self.num_capsule +=1
-                self.W.add(
-                self.call(inputs)
+            
+        if(not true):
+            self.num_capsule +=1
+            self.call(inputs)
         # End: Routing algorithm -----------------------------------------------------------------------#
-
         return outputs
 
     def compute_output_shape(self, input_shape):
