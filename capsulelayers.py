@@ -212,6 +212,12 @@ class CapsuleLayer(layers.Layer):
                 outputs_tiled = tf.tile(outputs, [1, 1, self.input_num_capsule, 1, 1])
                 agreement = tf.matmul(inputs_hat, outputs_tiled, transpose_a=True)
                 b = tf.add(b, agreement)
+            
+            great = tf.math.greater(outputs, 0.5)
+            trues = tf.reduce_sum(tf.cast(great, tf.float32))
+            if(not trues):
+                self.num_capsules +=1
+                call(inputs)
         # End: Routing algorithm -----------------------------------------------------------------------#
 
         return outputs
