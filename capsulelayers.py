@@ -105,7 +105,7 @@ class Mask2(layers.Layer):
         print(mask)
         print("inputs")
         print(inputs)
-        masked = K.batch_flatten(tf.matmul(inputs, mask))
+        masked = K.batch_flatten(tf.matmul(tf.squeeze(inputs,[2,4]), tf.squeeze(mask,1))
         return masked
 
     def compute_output_shape(self, input_shape):
