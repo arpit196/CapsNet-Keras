@@ -214,8 +214,9 @@ class CapsuleLayer(layers.Layer):
                 b = tf.add(b, agreement)
             
             great = tf.math.greater(outputs, 0.5)
-            trues = tf.reduce_sum(tf.cast(great, tf.float32))
-            if(not trues):
+            true_num = tf.reduce_sum(tf.cast(great, tf.float32))
+            true = tf.math.greater(true_num, 0)
+            if(not true):
                 self.num_capsules +=1
                 call(inputs)
         # End: Routing algorithm -----------------------------------------------------------------------#
