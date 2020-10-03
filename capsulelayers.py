@@ -213,11 +213,14 @@ class CapsuleLayer(layers.Layer):
                 agreement = tf.matmul(inputs_hat, outputs_tiled, transpose_a=True)
                 b = tf.add(b, agreement)
             
+            self.W_new = tf.random.uniform(shape = [self.input_num_capsule, self.dim_capsule, self.input_dim_capsule])
+            self.W = tf.stack(self.W, self.W_new)
             great = tf.math.greater(outputs, 0.5)
             true_num = tf.reduce_sum(tf.cast(great, tf.float32))
             true = tf.math.greater(true_num, 0)
             if(not true):
                 self.num_capsule +=1
+                self.W.add(
                 self.call(inputs)
         # End: Routing algorithm -----------------------------------------------------------------------#
 
