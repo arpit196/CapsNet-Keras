@@ -217,7 +217,7 @@ class CapsuleLayer(layers.Layer):
             true_num = tf.reduce_sum(tf.cast(great, tf.float32))
             true = tf.math.greater(true_num, 0)
             if(not true):
-                self.num_capsules +=1
+                self.num_capsule +=1
                 call(inputs)
         # End: Routing algorithm -----------------------------------------------------------------------#
 
