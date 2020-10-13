@@ -212,7 +212,8 @@ class CapsuleLayer(layers.Layer):
                 outputs_tiled = tf.tile(outputs, [1, 1, self.input_num_capsule, 1, 1])
                 agreement = tf.matmul(inputs_hat, outputs_tiled, transpose_a=True)
                 b = tf.add(b, agreement)
-            
+                
+        '''
             great = tf.math.greater(outputs, 0.5)
             true_num = tf.reduce_sum(tf.cast(great, tf.float32))
             true = tf.math.greater(true_num, 0)
@@ -223,6 +224,7 @@ class CapsuleLayer(layers.Layer):
             self.W = tf.concat([self.W, self.W_new], axis = 0)
             self.call(inputs)
         # End: Routing algorithm -----------------------------------------------------------------------#
+        '''
         return outputs
 
     def compute_output_shape(self, input_shape):
