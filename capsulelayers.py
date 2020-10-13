@@ -61,7 +61,8 @@ class Mask(layers.Layer):
         print(mask)
         print("inputs")
         print(inputs)
-        masked = K.batch_flatten(tf.matmul(tf.squeeze(inputs,2) , tf.expand_dims(mask, -1), transpose_b = True))
+        #masked = K.batch_flatten(tf.matmul(tf.squeeze(inputs,2) , tf.expand_dims(mask, -1), transpose_b = True))
+        masked = K.batch_flatten(tf.matmul(inputs , tf.expand_dims(mask, -1), transpose_b = True))
         return masked
 
     def compute_output_shape(self, input_shape):
