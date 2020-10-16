@@ -20,7 +20,9 @@ class Length(layers.Layer):
     output: shape=[None, num_vectors]
     """
     def call(self, inputs, **kwargs):
-        res = K.sqrt(K.sum(K.square(inputs), -1) + K.epsilon())
+        print("Inptttttttttttttttttttttt!")
+        print(inputs)
+        res = tf.sqrt(tf.sum(tf.square(inputs), -1) + tf.epsilon())
         print("result")
         print(res)
         return res
