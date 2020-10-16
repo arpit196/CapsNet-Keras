@@ -20,12 +20,8 @@ class Length(layers.Layer):
     output: shape=[None, num_vectors]
     """
     def call(self, inputs, **kwargs):
-        print("Inptttttttttttttttttttttt!")
-        print(inputs)
         inputs = tf.squeeze(inputs ,[2,4])
         res = tf.sqrt(tf.reduce_sum(tf.square(inputs), axis = -1) + tf.keras.backend.epsilon())
-        print("result")
-        print(res)
         return res
 
     def compute_output_shape(self, input_shape):
