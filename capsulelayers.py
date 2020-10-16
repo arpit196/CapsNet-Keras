@@ -22,7 +22,7 @@ class Length(layers.Layer):
     def call(self, inputs, **kwargs):
         print("Inptttttttttttttttttttttt!")
         print(inputs)
-        res = tf.sqrt(tf.sum(tf.square(inputs), -1) + tf.epsilon())
+        res = tf.sqrt(tf.reduce_sum(tf.square(inputs), axis = -1) + tf.epsilon())
         print("result")
         print(res)
         return res
