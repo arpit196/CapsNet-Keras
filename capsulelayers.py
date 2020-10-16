@@ -21,6 +21,7 @@ class Length(layers.Layer):
     """
     def call(self, inputs, **kwargs):
         res = K.sqrt(K.sum(K.square(inputs), -1) + K.epsilon())
+        print("result")
         print(res)
         return res
 
