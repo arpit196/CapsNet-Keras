@@ -108,7 +108,7 @@ class Mask2(layers.Layer):
         # mask.shape=[None, num_capsule]
         # masked.shape=[None, num_capsule * dim_capsule]
         print(mask)
-        print("inputs")
+        print("inputed1")
         print(inputs)
         masked = K.batch_flatten(tf.matmul(tf.squeeze(inputs,[2,4]), tf.squeeze(mask,1)))
         return masked
